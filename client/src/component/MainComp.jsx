@@ -1,11 +1,7 @@
 import React from 'react';
 import HeaderComp from './HeaderComp';
-import AboutUsPageComp from './pages/AboutUsPageComp';
-import CalendarPageComp from './pages/CalendarPageComp';
-import HomePageComp from './pages/HomePageComp';
-import LessonsPageComp from './pages/LessonsPageComp';
-import MembersPageComp from './pages/MembersPageComp';
-import ProjectsPageComp from './pages/ProjectsPageComp';
+import PageComp from './pages/PageComp'
+
 
 class MainComp extends React.Component {
 	constructor(props) {
@@ -13,25 +9,16 @@ class MainComp extends React.Component {
 		this.state = {
 			pageView : 1
 		};
+		
 	}
 
 	render() {
-		switch (this.state.pageView) {
-			case 1:
-				return([<HeaderComp/>,<HomePageComp/>]);
-			case 2:
-				return([<HeaderComp/>,<AboutUsPageComp/>]);;
-			case 3:
-				return([<HeaderComp/>,<MembersPageComp/>]);
-			case 4:
-				return([<HeaderComp/>,<ProjectsPageComp/>]);
-			case 5:
-				return([<HeaderComp/>,<LessonsPageComp/>]);
-			case 6:
-				return([<HeaderComp/>,<CalendarPageComp/>]);
-			default:
-				return null;
-		}
+		return(
+		<div >
+			<HeaderComp/>
+			<PageComp pageView = {this.state.pageView}/>
+		</div>
+		);
 	}
 }
 

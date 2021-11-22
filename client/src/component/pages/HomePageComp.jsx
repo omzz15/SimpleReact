@@ -1,5 +1,6 @@
 import React from "react";
 
+
 class HomePageComp extends React.Component {
 	render() {
 		return( 

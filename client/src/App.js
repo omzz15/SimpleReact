@@ -1,5 +1,5 @@
 import { Component } from "react";
-import HomeComp from "./component/MainComp";
+import MainComp from "./component/MainComp";
 import SignInComp from "./component/SignInComp";
 import SignUpComp from "./component/SignUpComp";
 
@@ -15,7 +15,9 @@ class App extends Component{
   render(){
     switch(this.state.renderView){
       case 1:
-        return <HomeComp/>;
+        return(
+          <MainComp/>
+        );
       case 2:
         return <SignInComp/>;
       case 3:
