@@ -9,7 +9,7 @@ class HeaderComp extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div style={{width:"100%"}}>
 				<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 					<a class="navbar-brand" href="#">
 						<img src={logo} width="61" height="45" />
