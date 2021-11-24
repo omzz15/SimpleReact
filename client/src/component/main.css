@@ -4,25 +4,25 @@ body {
   margin: 0;
 }
 
-.box {
+.page {
   display: flex;
   flex-flow: column;
   height: 100%;
 }
 
-.box .row {
+.page .row {
   margin: 0%;
   border: 1px dotted grey;
 }
 
-.box .row.header {
+.page .row.header {
   flex: 0 1 auto;
 }
 
-.box .row.content {
+.page .row.content {
   flex: 1 1 auto;
 }
 
-.box .row.footer {
+.page .row.footer {
   flex: 0 1 10px;
 }

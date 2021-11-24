@@ -27,9 +27,9 @@ class MainComp extends React.Component {
 	render() {
 		return (
 			<div style={{ backgroundImage: `url(${this.getBackground()})`, height: "100%" }}>
-				<div class="box">
+				<div class="page">
 					<div class="row header"><HeaderComp /></div>
-					<div class="row contnet"><div style={{height:"max-content"}}>test</div></div>
+					<div class="row contnet"><h1>test</h1></div>
 					<div class="row footer"></div>
 				</div>
 			</div>
