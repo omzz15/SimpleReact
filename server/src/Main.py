@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask_restful import Api
 
 from addUser import AddUser
+from loginUser import LoginUser
 from database import Database
 
 app = Flask(__name__)
@@ -18,6 +19,7 @@ def signup():
     return render_template("signup.html")
 
 api.add_resource(AddUser, '/add-user')
+api.add_resource(LoginUser, '/login')
 
 if __name__ == '__main__':
     db = Database()

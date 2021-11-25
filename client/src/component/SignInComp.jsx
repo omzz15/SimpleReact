@@ -1,7 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {loginUser} from '../action/userAction';
-import store from '../redux/store'
 
 class SignInComp extends React.Component {
 
@@ -14,7 +13,6 @@ class SignInComp extends React.Component {
 	handleSubmit(event) {
 		event.preventDefault();
 		this.props.loginUser(this.state.username, this.state.password);
-		alert(store.get)
 	}
 
 	render() {
@@ -26,10 +24,18 @@ class SignInComp extends React.Component {
 					<input type="submit" value="submit"/>
 				</form> 
 				<h1>SignInComp</h1>
+				Welcome {this.props.user.fname}
 			</div>
 		);
 	}
 
 }
 
-export default connect(null, {loginUser}) (SignInComp);
+function mapStateToProps(state) {
+    return {
+        user: state.user
+    };
+}
+
+export default connect(mapStateToProps, {loginUser}) (SignInComp);
+

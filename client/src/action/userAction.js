@@ -1,14 +1,11 @@
+import axios from 'axios';
 
 export const loginUser = (username, password) => {
     // make server call to login this user
-    alert("calling server" + username);
-    const userJson = {
-        id: 1,
-        username: username,
-        firstName: 'Om'
-    }
+    const reqData = {username: username, password: password}
+    const req = axios.post('http://localhost:80/login', reqData)
     return {
         type: "USER_LOGIN",
-        payload: userJson
+        payload: req
     }
 }
