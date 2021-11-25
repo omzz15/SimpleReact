@@ -8,7 +8,7 @@ class App extends Component{
     super();
     this.state = {
       currUser: null,
-      renderView: 1
+      renderView: 2
     };
   }
 

@@ -1,5 +1,7 @@
 import React from 'react';
-import {useDispatch} from 'react-redux'
+import {connect} from 'react-redux';
+import {loginUser} from '../action/userAction';
+import store from '../redux/store'
 
 class SignInComp extends React.Component {
 
@@ -7,26 +9,20 @@ class SignInComp extends React.Component {
 		super(props);
 		this.state = {username: '', password: ''}
 		this.handleSubmit = this.handleSubmit.bind(this);
-		const dispatch = useDispatch()
 	}
 
 	handleSubmit(event) {
 		event.preventDefault();
-		// login the user on the server side
-		const userJson = {
-			id: 1,
-			username: this.state.username,
-			firstName: 'Om'
-		}
-		dispatch(login(userJson));
+		this.props.loginUser(this.state.username, this.state.password);
+		alert(store.get)
 	}
 
 	render() {
 		return (
 			<div>
 				<form onSubmit={this.handleSubmit}>
-					<input type="text" value={this.state.username}/>
-					<input type="password" value={this.state.password}/>
+					<input type="text" value={this.state.username} onChange={(e) => this.setState({username: e.target.value})}/>
+					<input type="password" value={this.state.password} onChange={(e) => this.setState({password: e.target.value})}/>
 					<input type="submit" value="submit"/>
 				</form> 
 				<h1>SignInComp</h1>
@@ -36,4 +32,4 @@ class SignInComp extends React.Component {
 
 }
 
-export default SignInComp;
+export default connect(null, {loginUser}) (SignInComp);
