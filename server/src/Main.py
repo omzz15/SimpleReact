@@ -10,14 +10,6 @@ app = Flask(__name__)
 CORS(app)
 api = Api(app)
 
-@app.route("/")
-def home():
-    return render_template("index.html")
-
-@app.route("/signup")
-def signup():
-    return render_template("signup.html")
-
 api.add_resource(AddUser, '/add-user')
 api.add_resource(LoginUser, '/login')
 

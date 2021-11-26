@@ -8,10 +8,6 @@ import homeBackground from '../assets/homeBackground.png'
 
 
 class MainComp extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-
 	getBackground() {
 		switch (this.props.views.page) {
 			case 1:

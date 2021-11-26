@@ -22,6 +22,7 @@ class HeaderComp extends React.Component {
 	handleSubmit(event) {
 		event.preventDefault();
 		this.props.loginUser(this.state.username, this.state.password);
+		alert(this.props.user.status)
 	}
 
 	renderLoginForm() {

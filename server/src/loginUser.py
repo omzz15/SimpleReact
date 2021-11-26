@@ -8,11 +8,13 @@ class LoginUser(Resource):
         return {"status": 403}
     
     def post(self):
-        print(request.json)
         db = Database()
-        userDict = db.login(request.json['username'], request.json['password'])
+        try:
+            userDict = db.login(request.json['username'], request.json['password'])
+        except Exception as e:
+            return {"status": {"error": str(e), "field": e.field} , "payload": None}
         db.close()
-        jd = json.dumps(userDict)
+        jd = {"status": "OK", "payload": userDict}
         response = flask.make_response(jd)
         response.headers['content-type'] = 'application/json'
         return response

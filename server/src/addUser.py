@@ -3,10 +3,13 @@ from database import Database
 
 class AddUser(Resource):
     def get(self):
-        return {"message": "Hello, World!"}
+        return {"status": 403}
     
     def post(self):
         db = Database()
-        form = request.form
-        db.addUser(form.get("email"), form.get("username"), form.get("fname"), form.get("lname"), form.get("password"))
+        try:
+            db.addUser(request.json['email'], request.json['username'], request.json['fname'], request.json['lname'], request.json['password'])
+        except Exception as e:
+            return {"status": {"error": str(e), "field": e.field}, "payload": None}
         db.close()
+        return {"status": "OK", "payload": None}
