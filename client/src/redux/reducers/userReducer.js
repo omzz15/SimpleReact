@@ -1,8 +1,8 @@
 const initialState = {
     id: null,
-    username: '',
-    fname: '',
-    status: 'OK'
+    username: null,
+    fname: null,
+    status: null
 };
 
 export default function (state = initialState, action) {
@@ -15,23 +15,34 @@ export default function (state = initialState, action) {
                 const data = action.payload.data;
                 const status = data.status;
 
-                if (status === "OK") {
+                if (status.status === 0) {
                     const userInfo = data.payload;
                     return {
                         id: userInfo.id,
                         username: userInfo.username,
                         fname: userInfo.fname,
-                        status: state.status
+                        status: [status.status, status.value]
                     };
-                }else if(status.error === "Value Can't be Found"){
-                    state.status = "Username Can't be Found";
-                }else if(status.error === "Value is Incorrect"){
-                    state.status = "Password is Incorrect";
+                }else if(status.status === -1){
+                    alert("UNKNOWN ERROR! (Contact Admin) \n Error code: " + status.status + ", " + status.value)
                 }else{
-                    alert("UNKNOWN ERROR! (Contact Admin)")
+                    return {
+                        id: state.id,
+                        username: state.username,
+                        fname: state.fname,
+                        status: [status.status, status.value]
+                    };
                 }
                 return state
             }
+        }
+        case "CLEAR_STATUS": {
+            return {
+                id: state.id,
+                username: state.username,
+                fname: state.fname,
+                status: null
+            };
         }
         default:
             return state;

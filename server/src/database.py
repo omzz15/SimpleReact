@@ -1,6 +1,8 @@
 import sqlite3
 import requests
+from enum import Enum
 
+from requestHandler import RequestError
 
 class Database:
     sql_create_user_table = """ CREATE TABLE IF NOT EXISTS users (
@@ -33,36 +35,51 @@ class Database:
     def addUser(self, email, username, fname, lname, password, commit=True):
         c = self.conn.cursor()
 
+        # validate that all required fields are populated
+        if self.isFieldBlank(email):
+            raise BlankError(Field.EMAIL)
+        
+        if self.isFieldBlank(username):
+            raise BlankError(Field.USERNAME)
+
+        if self.isFieldBlank(fname):
+            raise BlankError(Field.F_NAME)
+
+        if self.isFieldBlank(password):
+            raise BlankError(Field.PASSWORD)
+
         # validate username and email is free
         c.execute("SELECT username, email FROM users WHERE username = ? OR email = ?", [
                   username, email])
         rows = c.fetchall()
         for row in rows:
             if(row[0] == username):
-                raise AlreadyUsedError("username")
+                raise AlreadyUsedError(Field.USERNAME)
             if(row[1] == email):
-                raise AlreadyUsedError("email")
+                raise AlreadyUsedError(Field.EMAIL)
 
         # validate username is not an email
-        if self.validEmail(username):
-            raise IncorrectError("email")
+        #TODO check usename is not an email
+        #if self.validEmail(username):
+        if False:
+            raise IncorrectError(Field.EMAIL)
 
         # validate fields
         if not self.isFieldValid(username):
-            raise InvalidError("username")
+            raise InvalidError(Field.USERNAME)
 
         if not self.isFieldValid(fname):
-            raise InvalidError("fname")
+            raise InvalidError(Field.F_NAME)
 
         if not self.isFieldValid(lname):
-            raise InvalidError("lname")
+            raise InvalidError(Field.L_NAME)
 
         if not self.isFieldValid(password):
-            raise InvalidError("password")
+            raise InvalidError(Field.PASSWORD)
 
         # validate the email
         if not self.validEmail(email):
-            raise InvalidError("email")
+            raise InvalidError(Field.EMAIL)
 
         # add user
         c.execute("INSERT INTO users (email, username, fname, lname, password) VALUES (?,?,?,?,?)", [
@@ -72,7 +89,8 @@ class Database:
 
     def validEmail(self, email):
         return True
-        #for development email check is off(TURN BACK ON!!)
+        # for development email check is off(TURN BACK ON!!)
+        #TODO turn email validater back on
         response = requests.get(
             "https://isitarealemail.com/api/email/validate",
             params={'email': email})
@@ -90,24 +108,30 @@ class Database:
                 return False
         return True
 
+    def isFieldBlank(self, field):
+        if(field == '' or field == None):
+            return True
+        return False
+
     def login(self, username, password):
         self.conn.row_factory = sqlite3.Row
         c = self.conn.cursor()
 
-        #get user
-        c.execute("select * FROM users WHERE username = ? OR email = ?", [username, username])
+        # get user
+        c.execute("select * FROM users WHERE username = ? OR email = ?",
+                  [username, username])
         aRow = c.fetchone()
 
-        #make sure the usename/email is there
+        # make sure the usename/email is there
         if(aRow == None):
-            raise NotFoundError("username")
+            raise NotFoundError(Field.USERNAME)
 
-        #make sure password is correct
+        # make sure password is correct
         d = dict(aRow)
         if(d["password"] != password):
-            raise IncorrectError("password")
+            raise IncorrectError(Field.PASSWORD)
 
-        #return user
+        # return user
         return d
 
     def getUsers(self):
@@ -125,30 +149,35 @@ class Database:
 ##############
 ##exceptions##
 ##############
-class DatabaseError(Exception):
-    def __init__(self, message, field):
-        super().__init__(message)
-        self.field = field
-
-    def toString(self):
-        return f"The {self.field} field {super}"
+class AlreadyUsedError(RequestError):
+    def __init__(self, field, message="Value is Already Used", error_ID=1):
+        super().__init__(message, error_ID, field.value)
 
 
-class AlreadyUsedError(DatabaseError):
-    def __init__(self, field, message="Value is Already Used"):
-        super().__init__(message, field)
+class NotFoundError(RequestError):
+    def __init__(self, field, message="Value Can't be Found", error_ID=2):
+        super().__init__(message, error_ID, field.value)
 
 
-class NotFoundError(DatabaseError):
-    def __init__(self, field, message="Value Can't be Found"):
-        super().__init__(message, field)
+class IncorrectError(RequestError):
+    def __init__(self, field, message="Value is Incorrect", error_ID=3):
+        super().__init__(message, error_ID, field.value)
 
 
-class IncorrectError(DatabaseError):
-    def __init__(self, field, message="Value is Incorrect"):
-        super().__init__(message, field)
+class InvalidError(RequestError):
+    def __init__(self, field, message="Value is Invalid", error_ID=4):
+        super().__init__(message, error_ID, field.value)
 
 
-class InvalidError(DatabaseError):
-    def __init__(self, field, message="Value is Invalid"):
-        super().__init__(message, field)
+class BlankError(RequestError):
+    def __init__(self, field, message="Value Can't be Blank", error_ID=5):
+        super().__init__(message, error_ID, field.value)
+
+
+class Field(Enum):
+    NONE = 0
+    EMAIL = 1
+    USERNAME = 2
+    F_NAME = 3
+    L_NAME = 4
+    PASSWORD = 5
