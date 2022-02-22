@@ -2,7 +2,7 @@ const initialState = {
     id: null,
     username: null,
     fname: null,
-    status: null
+    status: [0,0]
 };
 
 export default function (state = initialState, action) {

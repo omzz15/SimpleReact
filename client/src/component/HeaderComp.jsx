@@ -22,14 +22,21 @@ class HeaderComp extends React.Component {
 	handleSubmit(event) {
 		event.preventDefault();
 		this.props.loginUser(this.state.username, this.state.password);
-		if(this.props.user.status != null) alert(this.props.user.status)
+	}
+
+	renderUsernameForm(){
+		if(this.props.user.status != null && this.props.user.status[0] === 2 && this.props.user.status[1] === 2){
+			return <input class="form-control mr-sm-2" type="text" placeholder="Wrong!" value={this.state.username} onChange={(e) => this.setState({ username: e.target.value })} />
+		}else{ 
+			return <input class="form-control mr-sm-2" type="text" placeholder="username" value={this.state.username} onChange={(e) => this.setState({ username: e.target.value })} />
+		}
 	}
 
 	renderLoginForm() {
 		if (this.props.user.id == null)
 			return [
 				<form class="form-inline" onSubmit={this.handleSubmit}>
-					<input class="form-control mr-sm-2" type="text" placeholder="username" value={this.state.username} onChange={(e) => this.setState({ username: e.target.value })} />
+					{this.renderUsernameForm()}
 					<input class="form-control mr-sm-2" type="password" placeholder="password" value={this.state.password} onChange={(e) => this.setState({ password: e.target.value })} />
 					<button class="btn btn-outline-primary my-2 my-sm-0" style={{ marginRight: "10px" }} type="submit" value="submit">Sign In</button>
 				</form>,
